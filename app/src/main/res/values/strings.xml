@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">IssueViers</string>
     <string name="dismiss">dismiss</string>
+    <string name="no_data">no data available</string>
 </resources>

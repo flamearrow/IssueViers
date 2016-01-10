@@ -1,9 +1,9 @@
 package com.cen.chen.issueviers.dialogs;
 
 import android.app.DialogFragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.WindowDecorActionBar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,13 +81,16 @@ public class CommentDialog extends DialogFragment implements OnSuccessListener<C
                 getDialog().dismiss();
             }
         });
-        if (mRetainedFragment == null) {
+//        mRetainedFragment.getComments() would be null if previous dialog is created without
+// network
+        if (mRetainedFragment == null || mRetainedFragment.getComments() == null) {
             Log.d("mlgb", "requesting network for comment");
             mRetainedFragment = new CommentRetainedFragment();
             getFragmentManager().beginTransaction().add(mRetainedFragment, RETAINED_FRAGMENT + mUrl)
                     .commit();
             String[] params = {mUrl};
-            new ApiRequest(new CommentParser(), this, this).execute((Object[]) params);
+            new ApiRequest(new CommentParser(), this, this).executeOnExecutor(AsyncTask
+                    .THREAD_POOL_EXECUTOR, (Object[]) params);
         } else {
             Log.d("mlgb", "use existing comments");
             mComments = mRetainedFragment.getComments();
@@ -99,6 +102,7 @@ public class CommentDialog extends DialogFragment implements OnSuccessListener<C
     @Override
     public void onFailure(IOException e) {
         Log.d(TAG, "fail in looking for comment: " + e.toString());
+        updateFailureText();
     }
 
     @Override
@@ -110,6 +114,21 @@ public class CommentDialog extends DialogFragment implements OnSuccessListener<C
     private void updateDialogText() {
         mTextView.setText(buildCommentText(mComments));
         mProgresssBar.setVisibility(View.GONE);
+    }
+
+    private void updateFailureText() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                mTextView.setText(getString(R.string.no_data));
+                mProgresssBar.setVisibility(View.GONE);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private String buildCommentText(List<Comment> result) {

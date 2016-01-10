@@ -45,7 +45,9 @@ public class ApiRequest<T> extends AsyncTask<String, Integer, List<T>> {
             e.printStackTrace();
         } finally {
             try {
-                br.close();
+                if (br != null) {
+                    br.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -56,7 +58,9 @@ public class ApiRequest<T> extends AsyncTask<String, Integer, List<T>> {
 
     @Override
     protected void onPostExecute(List<T> result) {
-        mOnSuccessListener.onSuccess(result);
+        if (result != null) {
+            mOnSuccessListener.onSuccess(result);
+        }
     }
 
 }

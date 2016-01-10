@@ -5,10 +5,18 @@
     android:orientation="vertical">
 
     <ProgressBar
+        android:id="@+id/issueProgressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/issueProgressBar"
         android:indeterminate="true" />
+
+    <TextView
+        android:id="@+id/emtpyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/no_data"
+        android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/issueList"

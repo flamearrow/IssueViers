@@ -38,7 +38,7 @@ public class IssuesActivity extends Activity implements OnSuccessListener<Issue>
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private IssueAdapter mIssueAdapter;
-
+    private TextView mNoDataView;
     private List<Issue> mIssues;
 
     private IssueRetainedFragment mRetainedFragment;
@@ -51,6 +51,7 @@ public class IssuesActivity extends Activity implements OnSuccessListener<Issue>
                 (RETAINED_FRAGMENT);
         mRecyclerView = (RecyclerView) findViewById(R.id.issueList);
         mProgressBar = (ProgressBar) findViewById(R.id.issueProgressBar);
+        mNoDataView = (TextView) findViewById(R.id.emtpyView);
         mIssueAdapter = new IssueAdapter();
         mRecyclerView.setAdapter(mIssueAdapter);
         initializeRecyclerView();
@@ -82,6 +83,14 @@ public class IssuesActivity extends Activity implements OnSuccessListener<Issue>
     @Override
     public void onFailure(IOException e) {
         Log.d(TAG, "exception: " + e.toString());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mProgressBar.setVisibility(View.GONE);
+                mNoDataView.setVisibility(View.VISIBLE);
+                mRecyclerView.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void updateRecyclerView() {

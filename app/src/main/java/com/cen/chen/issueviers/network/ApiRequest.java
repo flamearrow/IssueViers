@@ -30,9 +30,10 @@ public class ApiRequest<T> extends AsyncTask<String, Integer, List<T>> {
     @Override
     protected List<T> doInBackground(String[] params) {
         List<T> list = null;
+        BufferedReader br = null;
         try {
             URLConnection connection = new URL(params[0]).openConnection();
-            BufferedReader br = new BufferedReader(
+            br = new BufferedReader(
                     new InputStreamReader(connection.getInputStream(), "UTF-8"));
             String newLine = br.readLine();
             while (newLine != null) {
@@ -42,6 +43,12 @@ public class ApiRequest<T> extends AsyncTask<String, Integer, List<T>> {
         } catch (IOException e) {
             mOnFailureListener.onFailure(e);
             e.printStackTrace();
+        } finally {
+            try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return list;
     }

@@ -14,12 +14,23 @@ import java.util.List;
 /**
  * Created by flamearrow on 1/7/16.
  */
+
+/**
+ * Generic api request to pull objects and provide callbacks when request succeed/fail
+ * Pass the url string as parameter
+ */
 public class ApiRequest<T> extends AsyncTask<String, Integer, List<T>> {
     private static final String TAG = "ApiRequest";
     private Parser<T> mParser;
     private OnSuccessListener mOnSuccessListener;
     private OnFailureListener mOnFailureListener;
 
+    /**
+     * Build the request to parse shit and handle success/failure
+     * @param parser Parser to take a json string and return a list of model objects
+     * @param successListener callback when models are successfully pulled and parsed
+     * @param onFailureListener callback when things got fucked up
+     */
     public ApiRequest(Parser<T> parser, OnSuccessListener successListener,
                       OnFailureListener onFailureListener) {
         mParser = parser;

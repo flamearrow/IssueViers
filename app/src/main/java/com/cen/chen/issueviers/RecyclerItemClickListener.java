@@ -3,6 +3,7 @@ package com.cen.chen.issueviers;
 /**
  * Created by flamearrow on 1/9/16.
  * stolen form http://stackoverflow.com/questions/24471109/recyclerview-onclick/26196831#26196831
+ * Deligate onItemTouchEvent as a onItemClickEvent for recycler view
  */
 
 import android.content.Context;
